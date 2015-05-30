@@ -1,0 +1,24 @@
+Firewall
+========
+
+This is a simple library which will have some action on a route being matched.
+
+It is useful for legacy projects where some authorisation code my be copy
+pasted into a header multiple times and there is no under-laying structure.
+
+## Example ##
+
+```php
+
+$firewall = new \Firewall\Firewall($_SERVER['REQUEST_URI']);
+
+$firewall
+    ->route('/managers\/.*/')
+    ->unless(function () use ($container) {
+       return $container['auth']->hasRole('manager');
+    })
+    ->handle(function () {
+        throw new _401Exception();
+    });
+
+```
