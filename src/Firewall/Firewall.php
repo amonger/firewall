@@ -1,6 +1,6 @@
 <?php
 
-namespace Firewall;
+namespace amonger\Firewall;
 
 use closure;
 
