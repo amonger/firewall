@@ -1,6 +1,6 @@
 <?php
 
-use Firewall\Firewall;
+use amonger\Firewall\Firewall;
 
 class FirewallTest extends PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,10 @@
 
 require_once "vendor/autoload.php";
 
-$firewall = new \Firewall\Firewall($_SERVER['REQUEST_URI']);
+use amonger\Firewall\_401Exception;
+use amonger\Firewall\Firewall;
+
+$firewall = new Firewall($_SERVER['REQUEST_URI']);
 $firewall
     ->route('/managers\/.*/')
     ->unless(function () use ($container) {

@@ -11,7 +11,7 @@ pasted into a header multiple times and there is no under-laying structure.
 
 ```php
 
-$firewall = new \Firewall\Firewall($_SERVER['REQUEST_URI']);
+$firewall = new \amonger\Firewall\Firewall($_SERVER['REQUEST_URI']);
 
 $firewall
     ->route('/managers\/.*/')
