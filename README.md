@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/amonger/Firewall.svg?branch=master)](https://travis-ci.org/amonger/Firewall)
+[![Build Status](https://travis-ci.org/amonger/firewall.svg?branch=master)](https://travis-ci.org/amonger/Firewall)
 Firewall
 ========
 
