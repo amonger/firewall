@@ -9,9 +9,12 @@ class FirewallTest extends PHPUnit_Framework_TestCase
      */
     protected $firewall;
 
+    protected $uri;
+
     public function setUp()
     {
-        $this->firewall = new Firewall('/managers/index.php');
+        $this->uri = '/managers/index.php';
+        $this->firewall = new Firewall($this->uri);
     }
 
     public function testUriIsMatched()
@@ -39,7 +42,7 @@ class FirewallTest extends PHPUnit_Framework_TestCase
         $result = $this
             ->firewall
             ->route('/\/managers\/index.php/')
-            ->unless(function () {
+            ->unless(function ($uri) {
                 return true;
             })
             ->handle(function () {});
@@ -51,16 +54,16 @@ class FirewallTest extends PHPUnit_Framework_TestCase
         $result = $this
             ->firewall
             ->route('/\/managers\/index.php/')
-            ->unless(function () {
+            ->unless(function ($uri) {
                 return true;
             })
-            ->unless(function () {
+            ->unless(function ($uri) {
                 return false;
             })
-            ->unless(function () {
+            ->unless(function ($uri) {
                 return false;
             })
-            ->handle(function () {});
+            ->handle(function ($uri) {});
         $this->assertFalse($result);
     }
 
@@ -69,7 +72,7 @@ class FirewallTest extends PHPUnit_Framework_TestCase
         $result = $this
             ->firewall
             ->route('/\/staff\/index.php/')
-            ->unless(function () {
+            ->unless(function ($uri) {
                 return false;
             })
             ->handle(function () {});
@@ -83,5 +86,20 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->route('/\/staff\/index.php/')
             ->handle(function () {});
         $this->assertFalse($result);
+    }
+
+    public function testUriIsReturnedIntoUnless()
+    {
+        $uriIsSame = false;
+        $definedUri = $this->uri;
+
+        $result = $this
+            ->firewall
+            ->route('/\/managers\/index.php/')
+            ->unless(function ($uri) use (&$uriIsSame, $definedUri) {
+                $uriIsSame = $definedUri === $uri;
+            });
+
+        $this->assertTrue($uriIsSame);
     }
 }
