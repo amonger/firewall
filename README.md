@@ -9,9 +9,36 @@ pasted into a header multiple times and there is no under-laying structure.
 
 ## Example ##
 
+###Individual routes###
+You can define routes individually by doing the following:
 ```php
 
-$firewall = new \amonger\Firewall\Firewall($_SERVER['REQUEST_URI']);
+use \amonger\Firewall\Firewall;
+
+$firewall = new Firewall($_SERVER['REQUEST_URI']);
+
+$firewall
+    ->route('/managers\/.*/')
+    ->unless(function ($uri) use ($container) {
+       return $container['auth']->hasRole('manager');
+    })
+    ->handle(function () {
+        throw new _401Exception();
+    })
+    ->execute();
+
+```
+
+###Multiple routes###
+A scenario which is more likely is that you will have a single request
+uri and multiple routes you'd like to handle. In this case you can use the builder
+to setup the firewall.
+
+```php
+use \amonger\Firewall\Firewall;
+
+$firewall = Firewall::getBuilder();
+$firewall->setRequestUri($_SERVER['REQUEST_URI']);
 
 $firewall
     ->route('/managers\/.*/')
@@ -22,4 +49,14 @@ $firewall
         throw new _401Exception();
     });
 
+$firewall
+    ->route('/clients\/.*/')
+    ->unless(function ($uri) use ($container) {
+       return $container['auth']->hasRole('clients');
+    })
+    ->handle(function () {
+        throw new _401Exception();
+    });
+
+Firewall::run($firewall);
 ```

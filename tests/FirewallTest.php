@@ -22,7 +22,9 @@ class FirewallTest extends PHPUnit_Framework_TestCase
         $result = $this
             ->firewall
             ->route('/\/managers\/index.php/')
-            ->handle(function () {});
+            ->handle(function () {
+            })
+            ->execute();
         $this->assertTrue($result);
     }
 
@@ -33,7 +35,9 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->firewall
             ->route('/\/staff\/index.php/')
             ->route('/\/managers\/index.php/')
-            ->handle(function () {});
+            ->handle(function () {
+            })
+            ->execute();
         $this->assertTrue($result);
     }
 
@@ -45,7 +49,9 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->unless(function ($uri) {
                 return true;
             })
-            ->handle(function () {});
+            ->handle(function () {
+            })
+            ->execute();
         $this->assertFalse($result);
     }
 
@@ -63,7 +69,9 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->unless(function ($uri) {
                 return false;
             })
-            ->handle(function ($uri) {});
+            ->handle(function ($uri) {
+            })
+            ->execute();
         $this->assertFalse($result);
     }
 
@@ -75,16 +83,20 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->unless(function ($uri) {
                 return false;
             })
-            ->handle(function () {});
+            ->handle(function () {
+            })
+            ->execute();
         $this->assertFalse($result);
     }
 
     public function testUriIsNotMatched()
     {
-         $result = $this
+        $result = $this
             ->firewall
             ->route('/\/staff\/index.php/')
-            ->handle(function () {});
+            ->handle(function () {
+            })
+            ->execute();
         $this->assertFalse($result);
     }
 
@@ -98,7 +110,9 @@ class FirewallTest extends PHPUnit_Framework_TestCase
             ->route('/\/managers\/index.php/')
             ->unless(function ($uri) use (&$uriIsSame, $definedUri) {
                 $uriIsSame = $definedUri === $uri;
-            });
+            })
+            ->handle(function(){})
+            ->execute();
 
         $this->assertTrue($uriIsSame);
     }
