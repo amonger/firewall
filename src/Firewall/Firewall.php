@@ -39,7 +39,7 @@ class Firewall
      */
     public function unless(closure $condition)
     {
-        $this->conditions[] = $condition();
+        $this->conditions[] = $condition($this->uri);
         return $this;
     }
 
