@@ -2,6 +2,8 @@
 
 namespace amonger\Firewall;
 
+use amonger\Firewall\Collection\Collection;
+use amonger\Firewall\Collection\CollectionBuilder;
 use closure;
 
 /**
@@ -13,6 +15,7 @@ use closure;
 class Firewall
 {
     private $routes;
+    private $handler;
     private $conditions = array();
 
     /**
@@ -56,12 +59,35 @@ class Firewall
      */
     public function handle(closure $fn)
     {
+        $this->handler = $fn;
+
+        return $this;
+    }
+
+    public function execute()
+    {
         foreach ($this->routes as $route) {
             if (preg_match($route, $this->uri) && !$this->isAuthorised()) {
-                $fn();
+                $handler = $this->handler;
+                $handler();
+
                 return true;
             }
         }
+
         return false;
+    }
+
+    public static function getBuilder()
+    {
+        return new CollectionBuilder(new Collection());
+    }
+
+    public static function run(CollectionBuilder $firewallCollection)
+    {
+        $collection = $firewallCollection->getCollection();
+        for($i = 0; $i < $collection->count(); $i++ ) {
+            $collection[$i]->execute();
+        }
     }
 }
