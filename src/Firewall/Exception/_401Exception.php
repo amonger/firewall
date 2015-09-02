@@ -1,6 +1,6 @@
 <?php
 
-namespace amonger\Firewall;
+namespace amonger\Firewall\Exception;
 
 use Exception;
 
